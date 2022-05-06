@@ -106,6 +106,18 @@ app.post('/blogs', (req, res) => {
         })
 });
 
+app.get('/blogs/:id', (req, res) => {
+    const id = req.params.id;
+    Blog.findById(id)
+        .then((result) => {
+            // Render the details view with the data that we got back
+            render('details', { blog: result, title: 'Blog Details' });
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+});
+
 
 app.get('/blogs/create', (req, res) => {
     res.render('create', { title: 'Create A New Blog' });
