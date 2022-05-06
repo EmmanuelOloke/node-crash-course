@@ -1,61 +1,23 @@
 const express = require('express');
-const Blog = require('../models/blog');
+const blogController = require('../controllers/blogController');
 
 // Create a new Express router
 const router = express.Router();
 
 // BLOG ROUTES
-router.get('/', (req, res) => {
-    Blog.find().sort({ createdAt: -1 })
-        .then((result) => {
-            // Pass the array of blogs gotten back from the model (db collection) to the index.ejs view
-            res.render('index', { title: 'All Blogs', blogs: result });
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-});
+// Renders the home page with all the blogs
+router.get('/', blogController.blog_index);
 
 // Post a new Blog document to the database
-router.post('/', (req, res) => {
-    const blog = new Blog(req.body); // Creating a new instance of blog and passing the form data object into it.
+router.post('/', blogController.blog_create_post);
 
-    blog.save()
-        .then(result => {
-            res.redirect('/blogs'); // Redirect back to the home page after form data has been collected and saved to the db so we can see the newly added blog.
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-});
+// Create a new instance of blog and redirects to the home page.
+router.get('/create', blogController.blog_create_get)
 
-router.get('/create', (req, res) => {
-    res.render('create', { title: 'Create A New Blog' });
-})
+// Renders the details of the blog post we got back from the db relative to the id that was passed into the route parameter
+router.get('/:id', blogController.blog_details);
 
-router.get('/:id', (req, res) => {
-    const id = req.params.id; // Access the Route Parameter.
-    Blog.findById(id)
-        .then((result) => {
-            // Render the details view with the data that we got back
-            res.render('details', { blog: result, title: 'Blog Details' });
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-});
-
-router.delete('/:id', (req, res) => {
-    const id = req.params.id;
-    Blog.findByIdAndDelete(id)
-        .then(result => {
-            // We cannot do a redirect here because we're receiving an AJAX request from the frontend (details.ejs), so we have to send a JSON file back to the browser in NodeJS.
-            // We are going to send a JSON data back to the browser after deleting and that JSON data will have a redirect property (URL to where we wanna redirect to).
-            res.json({ redirect: '/blogs' })
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-});
+// Deletes a blog post and redirects back to the home page
+router.delete('/:id', blogController.blog_delete);
 
 module.exports = router;
