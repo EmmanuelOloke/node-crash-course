@@ -78,6 +78,7 @@ h3 {
     margin: 40px 0;
     padding-left: 30px;
     border-left: 6px solid crimson;
+    border-radius: 5px;
 }
 
 .blogs a:hover h3 {
