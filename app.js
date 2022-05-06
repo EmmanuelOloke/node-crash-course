@@ -20,7 +20,12 @@ app.set('view engine', 'ejs');
 
 
 // Middleware and Static Files
-app.use(express.static('public'))
+app.use(express.static('public'));
+
+// Middleware that helps get access to all data coming from the create new blog form. Takes all the URL Encoded data coming
+app.use(express.urlencoded({ extended: true }));
+// from the form and passes that into an object we can use on the REQUEST object in app.post blog route.
+
 app.use(morgan('dev'));
 
 // Mongoose and Mongo Sandbox Routes
@@ -82,6 +87,19 @@ app.get('/blogs', (req, res) => {
         .then((result) => {
             // Pass the array of blogs gotten back from the model (db collection) to the index.ejs view
             res.render('index', { title: 'All Blogs', blogs: result });
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+});
+
+// Post a new Blog document to the database
+app.post('/blogs', (req, res) => {
+    const blog = new Blog(req.body); // Creating a new instance of blog and passing the form data object into it.
+
+    blog.save()
+        .then(result => {
+            res.redirect('/blogs'); // Redirect back to the home page after form data has been collected and saved to the db so we can see the newly added blog.
         })
         .catch((err) => {
             console.log(err);
