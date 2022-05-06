@@ -110,11 +110,6 @@ app.get('/blogs/create', (req, res) => {
     res.render('create', { title: 'Create A New Blog' });
 })
 
-// 404
-app.use((req, res) => {
-    res.status(404).render('404', { title: '404' });
-})
-
 app.get('/blogs/:id', (req, res) => {
     const id = req.params.id; // Access the Route Parameter.
     Blog.findById(id)
@@ -139,3 +134,9 @@ app.delete('/blogs/:id', (req, res) => {
             console.log(err);
         })
 });
+
+
+// 404
+app.use((req, res) => {
+    res.status(404).render('404', { title: '404' });
+})
