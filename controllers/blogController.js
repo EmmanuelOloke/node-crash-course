@@ -5,7 +5,7 @@ const blog_index = (req, res) => {
     Blog.find().sort({ createdAt: -1 })
         .then((result) => {
             // Pass the array of blogs gotten back from the model (db collection) to the index.ejs view
-            res.render('index', { title: 'All Blogs', blogs: result });
+            res.render('blogs/index', { title: 'All Blogs', blogs: result });
         })
         .catch((err) => {
             console.log(err);
@@ -17,7 +17,7 @@ const blog_details = (req, res) => {
     Blog.findById(id)
         .then((result) => {
             // Render the details view with the data that we got back
-            res.render('details', { blog: result, title: 'Blog Details' });
+            res.render('blogs/details', { blog: result, title: 'Blog Details' });
         })
         .catch((err) => {
             console.log(err);
@@ -25,7 +25,7 @@ const blog_details = (req, res) => {
 }
 
 const blog_create_get = (req, res) => {
-    res.render('create', { title: 'Create A New Blog' });
+    res.render('blogs/create', { title: 'Create A New Blog' });
 }
 
 const blog_create_post = (req, res) => {
