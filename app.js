@@ -111,7 +111,7 @@ app.get('/blogs/:id', (req, res) => {
     Blog.findById(id)
         .then((result) => {
             // Render the details view with the data that we got back
-            render('details', { blog: result, title: 'Blog Details' });
+            res.render('details', { blog: result, title: 'Blog Details' });
         })
         .catch((err) => {
             console.log(err);
