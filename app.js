@@ -106,8 +106,17 @@ app.post('/blogs', (req, res) => {
         })
 });
 
+app.get('/blogs/create', (req, res) => {
+    res.render('create', { title: 'Create A New Blog' });
+})
+
+// 404
+app.use((req, res) => {
+    res.status(404).render('404', { title: '404' });
+})
+
 app.get('/blogs/:id', (req, res) => {
-    const id = req.params.id;
+    const id = req.params.id; // Access the Route Parameter.
     Blog.findById(id)
         .then((result) => {
             // Render the details view with the data that we got back
@@ -118,12 +127,15 @@ app.get('/blogs/:id', (req, res) => {
         })
 });
 
-
-app.get('/blogs/create', (req, res) => {
-    res.render('create', { title: 'Create A New Blog' });
-})
-
-// 404
-app.use((req, res) => {
-    res.status(404).render('404', { title: '404' });
-})
+app.delete('/blogs/:id', (req, res) => {
+    const id = req.params.id;
+    Blog.findByIdAndDelete(id)
+        .then(result => {
+            // We cannot do a redirect here because we're receiving an AJAX request from the frontend (details.ejs), so we have to send a JSON file back to the browser in NodeJS.
+            // We are going to send a JSON data back to the browser after deleting and that JSON data will have a redirect property (URL to where we wanna redirect to).
+            res.json({ redirect: '/blogs' })
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+});

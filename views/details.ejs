@@ -19,6 +19,26 @@
 
 
             <%- include('./partials/footer.ejs')%>
+
+                <script>
+                    // Select the delete button then fire a functuon on click that sends a delete request (using the fetch API) to the server with the id as the endpoint.
+                    const trashCan = document.querySelector('a.delete');
+
+                    trashCan.addEventListener('click', (e) => {
+                        const endPoint = `/blogs/${trashCan.dataset.doc}`;
+
+
+                        // This is an AJAX request to the server becuase we're doing it from JS on the frontend, so it returns a JSON file.
+                        fetch(endPoint, {
+                                method: 'DELETE'
+                            })
+                            .then((response) => response.json()) // response is the JSON data that came back to us from the browser, and now we parse it into a JS object.
+                            .then((data) => window.location.href = data.redirect) // which we can now use as data (you can call it anything you like)
+                            .catch(err => {
+                                console.log(err);
+                            })
+                    })
+                </script>
     </body>
 
 </html>
