@@ -9,7 +9,7 @@ const blogRoutes = require('./routes/blogRoutes');
 const app = express();
 
 // Connect to MongoDB
-const dbURI = process.env.DB_URL;
+const dbURI = process.env.DB_URI;
 
 // The second argument here stops the DEPRECATION ERRORS.
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
